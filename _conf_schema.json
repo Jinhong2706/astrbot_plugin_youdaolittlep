@@ -16,17 +16,20 @@
     "type": "string"
   },
   "default_voice": {
-    "description": "默认音色 (youxiaoshi/youxiaojin)，如果不填则指令中必须指定",
+    "description": "默认音色 (youxiaoshi/youxiaojin)",
     "type": "string",
-    "options": ["youxiaoshi", "youxiaojin"]
+    "options": ["youxiaoshi", "youxiaojin"],
+    "default": "youxiaoshi"
   },
   "max_length": {
     "description": "单次请求最大文本长度（字符）",
-    "type": "int"
+    "type": "int",
+    "default": 100
   },
   "send_mode": {
     "description": "发送方式 (voice/file)",
     "type": "string",
-    "options": ["voice", "file"]
+    "options": ["voice", "file"],
+    "default": "voice"
   }
 }
