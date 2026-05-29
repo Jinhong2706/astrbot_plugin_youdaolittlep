@@ -16,7 +16,7 @@
     "type": "string"
   },
   "default_voice": {
-    "description": "默认音色",
+    "description": "默认音色 (youxiaoshi/youxiaojin)，如果不填则指令中必须指定",
     "type": "string",
     "options": ["youxiaoshi", "youxiaojin"]
   },
@@ -25,7 +25,7 @@
     "type": "int"
   },
   "send_mode": {
-    "description": "发送方式",
+    "description": "发送方式 (voice/file)",
     "type": "string",
     "options": ["voice", "file"]
   }

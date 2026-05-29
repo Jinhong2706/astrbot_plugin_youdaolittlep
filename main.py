@@ -20,14 +20,31 @@ class YoudaoXiaoPPlugin(Star):
         self.fixed_key = config.get("fixed_key", "")
         self.base_url = config.get("base_url", "")
         self.default_voice = config.get("default_voice", "")
-        self.max_length = config.get("max_length", 100)
-        self.send_mode = config.get("send_mode", "voice")
+        self.max_length = config.get("max_length", 0)
+        self.send_mode = config.get("send_mode", "")
 
-        if not self.device_sn or not self.fixed_key or not self.base_url:
-            logger.warning("有道小P插件配置不完整，请填写 device_sn, fixed_key, base_url")
+        missing = []
+        if not self.device_sn:
+            missing.append("device_sn")
+        if not self.key_id:
+            missing.append("key_id")
+        if not self.fixed_key:
+            missing.append("fixed_key")
+        if not self.base_url:
+            missing.append("base_url")
+        if self.max_length <= 0:
+            missing.append("max_length")
+        if self.send_mode not in ("voice", "file"):
+            missing.append("send_mode (must be voice or file)")
+        if missing:
+            logger.error(f"有道小P插件配置缺失: {', '.join(missing)}，请填写配置后重载插件")
 
     @filter.command("tts")
     async def tts_command(self, event: AstrMessageEvent):
+        if not self.device_sn or not self.key_id or not self.fixed_key or not self.base_url or self.max_length <= 0 or self.send_mode not in ("voice", "file"):
+            yield event.plain_result("插件配置不完整，请先在 WebUI 中配置 device_sn, key_id, fixed_key, base_url, max_length, send_mode")
+            return
+
         full_text = event.message_str.strip()
         if full_text.startswith("/tts"):
             full_text = full_text[4:].strip()
@@ -37,14 +54,19 @@ class YoudaoXiaoPPlugin(Star):
             return
 
         parts = full_text.split(maxsplit=1)
-        voice = self.default_voice
-        content = full_text
+        voice = None
+        content = None
 
         if len(parts) == 2 and parts[0] in ("youxiaoshi", "youxiaojin"):
             voice = parts[0]
             content = parts[1]
-        elif len(parts) == 1:
-            content = parts[0]
+        else:
+            content = full_text
+            if self.default_voice:
+                voice = self.default_voice
+            else:
+                yield event.plain_result("未指定音色且未配置默认音色，请在指令中指定音色，如：/tts youxiaoshi 文本")
+                return
 
         if not content:
             yield event.plain_result("文本内容不能为空。")
