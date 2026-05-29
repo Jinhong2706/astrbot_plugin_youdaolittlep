@@ -42,18 +42,23 @@ class YoudaoXiaoPPlugin(Star):
             yield event.plain_result("插件配置不完整，请先在 WebUI 中配置 device_sn, key_id, fixed_key, base_url")
             return
 
-        raw_text = event.message_str.strip()
-        if not raw_text:
+        raw = event.message_str.strip()
+        # 兼容某些平台残留的指令名 'tts'
+        if raw.startswith('tts'):
+            raw = raw[3:].strip()
+
+        if not raw:
             yield event.plain_result("请提供要合成的文本。示例：tts 你好世界")
             return
 
         voice = self.default_voice
-        content = raw_text
+        content = raw
 
-        voice_match = re.match(r'^(youxiaoshi|youxiaojin)\s*(.*)$', raw_text, re.DOTALL)
-        if voice_match:
-            voice = voice_match.group(1)
-            content = voice_match.group(2).strip()
+        # 匹配音色（支持后面跟空格或者直接跟文本）
+        m = re.match(r'^(youxiaoshi|youxiaojin)(?:\s+(.*))?$', raw, re.DOTALL)
+        if m:
+            voice = m.group(1)
+            content = (m.group(2) or "").strip()
             if not content:
                 yield event.plain_result(f"音色 {voice} 后没有提供文本内容。")
                 return
@@ -141,7 +146,6 @@ class YoudaoXiaoPPlugin(Star):
         if len(text) <= max_len:
             return [text]
 
-        import re
         sentences = re.split(r'([。！？；，,])', text)
         chunks = []
         current = ""
