@@ -19,9 +19,9 @@ class YoudaoXiaoPPlugin(Star):
         self.key_id = config.get("key_id", "")
         self.fixed_key = config.get("fixed_key", "")
         self.base_url = config.get("base_url", "")
-        self.default_voice = config.get("default_voice", "")
-        self.max_length = config.get("max_length", 0)
-        self.send_mode = config.get("send_mode", "")
+        self.default_voice = config.get("default_voice", "youxiaoshi")
+        self.max_length = config.get("max_length", 100)
+        self.send_mode = config.get("send_mode", "voice")
 
         missing = []
         if not self.device_sn:
@@ -32,17 +32,13 @@ class YoudaoXiaoPPlugin(Star):
             missing.append("fixed_key")
         if not self.base_url:
             missing.append("base_url")
-        if self.max_length <= 0:
-            missing.append("max_length")
-        if self.send_mode not in ("voice", "file"):
-            missing.append("send_mode (must be voice or file)")
         if missing:
             logger.error(f"有道小P插件配置缺失: {', '.join(missing)}，请填写配置后重载插件")
 
     @filter.command("tts")
     async def tts_command(self, event: AstrMessageEvent):
-        if not self.device_sn or not self.key_id or not self.fixed_key or not self.base_url or self.max_length <= 0 or self.send_mode not in ("voice", "file"):
-            yield event.plain_result("插件配置不完整，请先在 WebUI 中配置 device_sn, key_id, fixed_key, base_url, max_length, send_mode")
+        if not self.device_sn or not self.key_id or not self.fixed_key or not self.base_url:
+            yield event.plain_result("插件配置不完整，请先在 WebUI 中配置 device_sn, key_id, fixed_key, base_url")
             return
 
         full_text = event.message_str.strip()
@@ -62,11 +58,7 @@ class YoudaoXiaoPPlugin(Star):
             content = parts[1]
         else:
             content = full_text
-            if self.default_voice:
-                voice = self.default_voice
-            else:
-                yield event.plain_result("未指定音色且未配置默认音色，请在指令中指定音色，如：/tts youxiaoshi 文本")
-                return
+            voice = self.default_voice
 
         if not content:
             yield event.plain_result("文本内容不能为空。")
