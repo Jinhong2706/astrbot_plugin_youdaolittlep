@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import tempfile
+import re
 from pathlib import Path
 from typing import List
 import aiohttp
@@ -33,7 +34,7 @@ class YoudaoXiaoPPlugin(Star):
         if not self.base_url:
             missing.append("base_url")
         if missing:
-            logger.error(f"有道小P插件配置缺失: {', '.join(missing)}，请填写配置后重载插件")
+            logger.error(f"有道小P配置缺失: {', '.join(missing)}，请填写配置后重载插件")
 
     @filter.command("tts")
     async def tts_command(self, event: AstrMessageEvent):
@@ -41,28 +42,27 @@ class YoudaoXiaoPPlugin(Star):
             yield event.plain_result("插件配置不完整，请先在 WebUI 中配置 device_sn, key_id, fixed_key, base_url")
             return
 
-        full_text = event.message_str.strip()
-        if full_text.startswith("/tts"):
-            full_text = full_text[4:].strip()
-
-        if not full_text:
-            yield event.plain_result("请提供要合成的文本。示例：/tts 你好世界")
+        raw_text = event.message_str.strip()
+        if not raw_text:
+            yield event.plain_result("请提供要合成的文本。示例：tts 你好世界")
             return
 
-        parts = full_text.split(maxsplit=1)
-        voice = None
-        content = None
+        voice = self.default_voice
+        content = raw_text
 
-        if len(parts) == 2 and parts[0] in ("youxiaoshi", "youxiaojin"):
-            voice = parts[0]
-            content = parts[1]
-        else:
-            content = full_text
-            voice = self.default_voice
+        voice_match = re.match(r'^(youxiaoshi|youxiaojin)\s*(.*)$', raw_text, re.DOTALL)
+        if voice_match:
+            voice = voice_match.group(1)
+            content = voice_match.group(2).strip()
+            if not content:
+                yield event.plain_result(f"音色 {voice} 后没有提供文本内容。")
+                return
 
         if not content:
             yield event.plain_result("文本内容不能为空。")
             return
+
+        logger.info(f"音色: {voice}, 文本: {content}")
 
         try:
             audio_path = await self._synthesize(content, voice)
