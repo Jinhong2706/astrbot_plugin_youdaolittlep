@@ -1,0 +1,32 @@
+{
+  "device_sn": {
+    "description": "有道词典笔设备序列号 (Device SN)",
+    "type": "string"
+  },
+  "key_id": {
+    "description": "Key ID",
+    "type": "string"
+  },
+  "fixed_key": {
+    "description": "固定密钥 (Fixed Key)",
+    "type": "string"
+  },
+  "base_url": {
+    "description": "API 基础地址",
+    "type": "string"
+  },
+  "default_voice": {
+    "description": "默认音色",
+    "type": "string",
+    "options": ["youxiaoshi", "youxiaojin"]
+  },
+  "max_length": {
+    "description": "单次请求最大文本长度（字符）",
+    "type": "int"
+  },
+  "send_mode": {
+    "description": "发送方式",
+    "type": "string",
+    "options": ["voice", "file"]
+  }
+}

@@ -1,0 +1,12 @@
+name: astrbot_plugin_youdaoxiaop
+display_name: 有道小P TTS
+short_desc: 调用有道词典笔 TTS 接口，文本转语音
+desc: 使用有道词典笔的语音合成能力，将文本转换为 MP3 音频并发送。支持长文本自动分段合成，可选 youxiaoshi / youxiaojin 两种音色。
+author: YourName
+version: 1.0.0
+repo: https://github.com/yourname/astrbot_plugin_youdaoxiaop
+support_platforms:
+  - aiocqhttp
+  - telegram
+  - discord
+  - webchat
