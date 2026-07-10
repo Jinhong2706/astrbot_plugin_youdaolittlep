@@ -1,9 +1,9 @@
 name: astrbot_plugin_youdaolittlep
 display_name: 有道小P
-short_desc: 调用有道词典笔 TTS 接口，文本转语音
-desc: 使用有道词典笔的语音合成能力，将文本转换为 MP3 音频并发送。支持长文本自动分段合成，可选 youxiaoshi / youxiaojin 两种音色。
+short_desc: 有道词典笔 AI 对话 + 语音合成插件
+desc: 接入有道词典笔 AI 能力，支持 SSE 流式 AI 对话答疑、文字转语音（TTS）、常见问题（FAQ）查看。可配置学段和分类筛选。
 author: Jinhong270
-version: 1.0.0
+version: 2.0.0
 repo: https://github.com/Jinhong270/astrbot_plugin_youdaolittlep
 support_platforms:
   - aiocqhttp

@@ -15,6 +15,18 @@
     "description": "API 基础地址",
     "type": "string"
   },
+  "education_stage": {
+    "description": "常见问题学段筛选",
+    "type": "string",
+    "options": ["全部", "小学", "初中", "高中"],
+    "default": "全部"
+  },
+  "category_type": {
+    "description": "常见问题分类筛选",
+    "type": "string",
+    "options": ["全部", "题目答疑", "趣味知识"],
+    "default": "全部"
+  },
   "default_voice": {
     "description": "默认音色 (youxiaoshi/youxiaojin)",
     "type": "string",
