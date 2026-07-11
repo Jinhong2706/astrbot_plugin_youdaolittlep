@@ -1,9 +1,9 @@
 name: astrbot_plugin_youdaolittlep
 display_name: 有道小P
-short_desc: 有道词典笔 AI 对话 + 语音合成插件
-desc: 接入有道词典笔 AI 能力，支持 SSE 流式 AI 对话答疑、文字转语音（TTS）、常见问题（FAQ）查看。可配置学段和分类筛选。
+short_desc: 有道词典笔 AI 对话 + 语音合成 + 常见问题插件
+desc: 接入有道词典笔 AI 能力，支持 SSE 流式 AI 对话答疑、文字转语音（TTS）、常见问题（FAQ）交互式查看（序号选择自动对话）。可配置学段和分类筛选。
 author: Jinhong270
-version: 2.0.0
+version: 3.0.1
 repo: https://github.com/Jinhong270/astrbot_plugin_youdaolittlep
 support_platforms:
   - aiocqhttp
