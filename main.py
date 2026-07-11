@@ -6,6 +6,11 @@ from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.message_components import File, Record
 from astrbot.api.star import Context, Star
 from astrbot.core.utils.session_waiter import session_waiter, SessionController
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
 
 from core.retry import retry
 from core.sign import common_params
